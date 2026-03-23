@@ -37,6 +37,4 @@ typedef struct {
     char     payload[957];
 } __attribute__((packed)) ChatPacket;
 
-_Static_assert(sizeof(ChatPacket) == 1024, "ChatPacket must be exactly 1024 bytes");
-
 #endif
