@@ -1,10 +1,4 @@
-# Protocolo de Comunicación — Chat en C
-
-**Universidad del Valle de Guatemala · Sistemas Operativos 2026**
-
-- **Versión:** 2.0  
-- **Transporte:** TCP  
-- **Formato:** Binario (struct fijo de 1024 bytes)
+# Protocolo de Comunicación — Chat
 
 ---
 
@@ -254,10 +248,10 @@ Cliente                          Servidor                    Otros clientes
 ```
 Cliente                          Servidor
     [crash / red caida]
-                                                                    recv() devuelve 0 o -1
-                                                                    [remueve cliente de lista]
-                                                                    [notifica CMD_DISCONNECTED a todos]
-                                                                    [termina thread]
+                                recv() devuelve 0 o -1
+                                [remueve cliente de lista]
+                                [notifica CMD_DISCONNECTED a todos]
+                                [termina thread]
 ```
 
 
@@ -317,5 +311,4 @@ Origen: 0.0.0.0/0
 ```
 
 Si no se habilita esta regla:
-
-❌ Los clientes no podrán conectarse.
+Los clientes no podrán conectarse.

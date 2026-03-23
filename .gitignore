@@ -1,0 +1,28 @@
+# Compilacion C / GCC
+*.o
+*.obj
+*.out
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Binarios del proyecto
+/server/server
+/client/client
+
+# Archivos temporales y logs
+*.log
+*.tmp
+*.temp
+core
+vgcore.*
+
+# Entornos locales
+.venv/
+venv/
+
+# Sistema / editor
+.DS_Store
+Thumbs.db
