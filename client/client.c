@@ -90,14 +90,17 @@ static void fill_packet(ChatPacket *pkt, uint8_t cmd, const char *sender, const 
 }
 
 static void print_help(void) {
-    printf("\nComandos disponibles:\n");
-    printf("  /broadcast <mensaje>\n");
-    printf("  /msg <usuario> <mensaje>\n");
-    printf("  /status <ACTIVE|BUSY|INACTIVE>\n");
-    printf("  /list\n");
-    printf("  /info <usuario>\n");
-    printf("  /help\n");
-    printf("  /exit\n\n");
+    printf("\n================================\n");
+    printf("    COMANDOS DISPONIBLES\n");
+    printf("================================\n");
+    printf("  /broadcast <mensaje>          - Enviar a todos\n");
+    printf("  /msg <usuario> <mensaje>      - Mensaje privado\n");
+    printf("  /status <ACTIVE|BUSY|INACTIVE> - Cambiar estado\n");
+    printf("  /list                         - Ver usuarios\n");
+    printf("  /info <usuario>               - Info de usuario\n");
+    printf("  /help                         - Mostrar esta ayuda\n");
+    printf("  /exit                         - Desconectarse\n");
+    printf("================================\n\n");
 }
 
 static void handle_sigint(int signum) {
@@ -137,12 +140,54 @@ static void *receiver_thread(void *arg) {
             case CMD_ERROR:
                 printf("\n[ERROR] %s\n", pkt.payload);
                 break;
-            case CMD_USER_LIST:
-                printf("\n[USUARIOS] %s\n", pkt.payload[0] ? pkt.payload : "(sin usuarios)");
+            case CMD_USER_LIST: {
+                if (pkt.payload[0] == '\0') {
+                    printf("\n[USUARIOS] (ninguno conectado)\n");
+                } else {
+                    printf("\n================================\n");
+                    printf("    USUARIOS CONECTADOS\n");
+                    printf("================================\n");
+                    printf("USUARIO              ESTADO\n");
+                    printf("================================\n");
+                    
+                    char *copy = strdup(pkt.payload);
+                    char *entry = strtok(copy, ";");
+                    while (entry != NULL) {
+                        char *comma = strchr(entry, ',');
+                        if (comma != NULL) {
+                            *comma = '\0';
+                            printf("%-20s %s\n", entry, comma + 1);
+                        }
+                        entry = strtok(NULL, ";");
+                    }
+                    free(copy);
+                    printf("================================\n");
+                }
                 break;
-            case CMD_USER_INFO:
-                printf("\n[INFO USUARIO] %s\n", pkt.payload);
+            }
+            case CMD_USER_INFO: {
+                if (pkt.payload[0] == '\0') {
+                    printf("\n[ERROR] Usuario no encontrado\n");
+                } else {
+                    char *copy = strdup(pkt.payload);
+                    char *comma = strchr(copy, ',');
+                    
+                    printf("\n================================\n");
+                    printf("    INFORMACIÓN DEL USUARIO\n");
+                    printf("================================\n");
+                    
+                    if (comma != NULL) {
+                        *comma = '\0';
+                        printf("Usuario: %s\n", pkt.target);
+                        printf("IP:      %s\n", copy);
+                        printf("Estado:  %s\n", comma + 1);
+                    }
+                    
+                    printf("================================\n");
+                    free(copy);
+                }
                 break;
+            }
             case CMD_DISCONNECTED:
                 printf("\n[INFO] Usuario desconectado: %s\n", pkt.payload);
                 break;
