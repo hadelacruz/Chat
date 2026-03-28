@@ -26,7 +26,7 @@
 #define STATUS_INACTIVO   "INACTIVE"
 
 /* Timeouts */
-#define INACTIVITY_TIMEOUT 60
+#define INACTIVITY_TIMEOUT 20
 
 /* Struct principal: siempre 1024 bytes */
 typedef struct {
